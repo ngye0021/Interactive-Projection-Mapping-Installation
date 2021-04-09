@@ -1,0 +1,393 @@
+import apsync.*;  //include the AP Sync Library 
+import processing.serial.*;  //include the Processing Serial Library 
+import spout.*;  //import Spout for Windows Application Library 
+import processing.video.*;  //import Video Library for Processing 
+
+PGraphics itrBoard;  //create a variable called itrBoard of type Pgraphics 
+
+/*
+boolean switch_itr1 = false; 
+boolean switch_itr2 = false; 
+boolean switch_itr3 = false; 
+boolean switch_itr4 = false; 
+boolean switch_itr5 = false; 
+boolean switch_itr6 = false; 
+*/
+
+Spout spoutMad;  //declare a Spout object 
+
+
+//create variables called itr1 - itr6 for all interactions 
+public float itr1;
+public float itr2;
+public float itr3;
+//public float itr4;
+public float itr5;
+public float itr6;
+
+//create variables called selected1 to selected6 for condition checking 
+int selected1 = 0;
+int selected2 = 0;
+int selected3 = 0;
+//int selected4 = 0;
+int selected5 = 0;
+int selected6 = 0;
+
+
+AP_Sync readData_Ardunio;  //create a variable of named readData of type AP Sync 
+
+
+//declare the Movie objects 
+Movie videoInput_One;
+Movie videoInput_Two;
+Movie videoInput_Three;
+//Movie videoInput_Four;
+Movie videoInput_Five;
+Movie videoInput_Six;
+
+
+void setup(){
+  
+  size(1920, 1080, P3D);  //adding a third arguement "P3D", necessary for Spout to run properly 
+  //textureMode(NORMAL); 
+  itrBoard = createGraphics(1920, 1080, P3D);  //instantiate the canvas in a similar format, with a matching resolution
+  
+  spoutMad = new Spout(this);  //create a new Spout object 
+  
+  //background(0);
+  
+  readData_Ardunio = new AP_Sync(this, "COM7", 9600);   //for AP-Sync, sending data from Arduino to Processing, via Serial Port "COM7"
+  
+  frameRate(30);
+  
+  /*
+  //initialise the Movie objects, video files are stored in the sketch's data directory (Trial Version)
+  videoInput_One = new Movie(this, "Head-ThePuppet_Skeleton.mov");
+  videoInput_One.play();
+  //videoInput_One.speed(5);
+  
+  videoInput_Two = new Movie(this, "LeftArm-ThePuppet_Skeleton.mov");
+  videoInput_Two.play();
+  //videoInput_Two.speed(5);
+  
+  videoInput_Three = new Movie(this, "RightArm-ThePuppet_Skeleton.mov");
+  videoInput_Three.play();
+  
+  //videoInput_Four = new Movie(this, "Torso-ThePuppet_Skeleton.mov");
+  //videoInput_Four.play();
+  
+  videoInput_Five = new Movie(this, "LeftLeg-ThePuppet_Skeleton.mov");
+  videoInput_Five.play();
+  
+  videoInput_Six = new Movie(this, "RightLeg-ThePuppet_Skeleton.mov");
+  videoInput_Six.play();
+  */
+  
+  //frameRate(1);
+  
+  //initialise the Movie objects, video files are stored in the sketch's data directory (Blender Version)
+  videoInput_One = new Movie(this, "Head_V2.mp4");
+  videoInput_One.play();
+  //videoInput_One.speed(5);
+  
+  videoInput_Two = new Movie(this, "LeftArm_V2.mp4");
+  videoInput_Two.play();
+  //videoInput_Two.speed(5);
+  
+  videoInput_Three = new Movie(this, "RightArm_V2.mp4");
+  videoInput_Three.play();
+  
+  //videoInput_Four = new Movie(this, "Torso-ThePuppet_Skeleton.mov");
+  //videoInput_Four.play();
+  
+  videoInput_Five = new Movie(this, "LeftLeg_V2.mp4");
+  videoInput_Five.play();
+  
+  videoInput_Six = new Movie(this, "RightLeg_V2.mp4");
+  videoInput_Six.play();
+  
+  
+  
+  //initialise the Movie objects, video files are stored in the sketch's data directory 
+/*  videoInput_One = new Movie(this, "Head-ThePuppet_Skeleton.mov");
+  //videoInput_One.play();
+  
+  videoInput_Two = new Movie(this, "LeftArm-ThePuppet_Skeleton.mov");
+  //videoInput_Two.play();
+  
+  videoInput_Three = new Movie(this, "RightArm-ThePuppet_Skeleton.mov");
+  //videoInput_Three.play();
+  
+  videoInput_Four = new Movie(this, "Torso-ThePuppet_Skeleton.mov");
+  //videoInput_Four.play();
+  
+  videoInput_Five = new Movie(this, "LeftLeg-ThePuppet_Skeleton.mov");
+  //videoInput_Five.play();
+  
+  videoInput_Six = new Movie(this, "RightLeg-ThePuppet_Skeleton.mov");
+  //videoInput_Six.play();
+ */
+
+}
+/*
+ void movieEvent(Movie m){
+  
+ // if (m == videoInput_One) videoInput_One.read();
+ // if (m == videoInput_Two) videoInput_Two.read();
+  if (m == videoInput_Three) videoInput_Three.read();
+  if (m == videoInput_Four) videoInput_Four.read();
+  if (m == videoInput_Five) videoInput_Five.read();
+  if (m == videoInput_Six) videoInput_Six.read();
+  
+}
+
+*/
+void draw(){
+  
+  itrBoard.beginDraw();
+  //background(0);
+  
+  /* print("itr1:");
+  println(abs(itr1));
+  
+  print("itr2:");
+  println(abs(itr2));
+  
+  print("itr3:");
+  println(abs(itr3));
+  
+  print("itr4:");
+  println(abs(itr4));
+  
+  print("itr5:");
+  println(abs(itr5));
+  
+  print("itr6:");
+  println(abs(itr6)); */
+  
+  
+//carry out condition checking, video files replay once corresponding itr1 to itr6 are triggered respectively  
+ 
+ if (itr1 > 1000) {
+   selected1 = 1; 
+   videoInput_One.jump(0);
+ }
+ 
+ if (selected1 > 0 && selected1 < 2){
+   videoInput_One.available();
+   videoInput_One.read();
+   itrBoard.image(videoInput_One, 0, 0, 480, 360);
+ }
+ 
+ 
+ if (itr2 > 1000) {
+   selected2 = 1; 
+   videoInput_Two.jump(0);
+ } 
+   
+ if (selected2 > 0 && selected2 < 2){
+   videoInput_Two.available();
+   videoInput_Two.read();
+   itrBoard.image(videoInput_Two, 0, 360, 480, 360);
+ }
+ 
+ 
+ if (itr3 > 1000) {
+   selected3 = 1; 
+   videoInput_Three.jump(0);
+ } 
+   
+ if (selected3 > 0 && selected3 < 2){
+   videoInput_Three.available();
+   videoInput_Three.read();
+   itrBoard.image(videoInput_Three, 0, 720, 480, 360);
+ }
+ 
+ 
+ /*if (itr4 > 1000) {
+   selected4 = 1; 
+   videoInput_Four.jump(0);
+ } 
+   
+ if (selected4 > 0 && selected4 < 2){
+   videoInput_Four.available();
+   videoInput_Four.read();
+   itrBoard.image(videoInput_Four, 480, 0, 480, 360);
+ }*/
+ 
+ 
+ if (itr5 > 1000) {
+   selected5 = 1; 
+   videoInput_Five.jump(0);
+ } 
+   
+ if (selected5 > 0 && selected5 < 2){
+   videoInput_Five.available();
+   videoInput_Five.read();
+   itrBoard.image(videoInput_Five, 480, 360, 480, 360);
+ }
+ 
+ 
+ if (itr6 > 1000) {
+   selected6 = 1; 
+   videoInput_Six.jump(0);
+ } 
+   
+ if (selected6 > 0 && selected6 < 2){
+   videoInput_Six.available();
+   videoInput_Six.read();
+   itrBoard.image(videoInput_Six, 480, 720, 480, 360);
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ /*
+ }else if (itr2 > 1000) {
+   selectedM = 2; 
+   videoInput_Two.jump(0);
+ }
+   
+ switch (selectedM) {
+   case 1: 
+   if (videoInput_One.available()) {
+     videoInput_One.read();
+     itrBoard.image(videoInput_One, 0, 0, 480, 360);
+   }
+   break;
+   case 2: 
+   if (videoInput_Two.available()) {
+     videoInput_Two.read();
+     itrBoard.image(videoInput_Two, 0, 360, 480, 360);
+   }
+   break;
+   default:
+   break;
+ }
+ 
+ 
+ */
+ 
+ 
+ /* if (itr1 > 1000){
+    //videoInput_One.play();
+    //itrBoard.image(videoInput_One, 0, 0, 480, 360);
+    switch_itr1 = true;
+    //itrBoard.endDraw();
+    //image(itrBoard, 0, 0);             //the sketch will now show the drawing that is being done to the canvas ie. itrBoard
+  } 
+  
+  if (switch_itr1){
+    
+    itrBoard.image(videoInput_One, 0, 0, 480, 360);
+    videoInput_One.play();
+    
+  }
+  */
+  
+ 
+  
+  //switch_itr1 = false;
+  
+ // else {
+    
+  //  switch_itr1 = false;
+    
+ // }
+  
+  /* if (!switch_itr1){
+  if (itr1 < 300){
+    switch_itr1 = true;
+  } 
+  } */
+  
+  
+  
+  /*
+  if (itr2 > 1000){
+    //itrBoard.image(videoInput_Two, 0, 360, 480, 360);
+    switch_itr2 = true;
+    
+  }
+  
+  
+  if (switch_itr2){
+    
+    itrBoard.image(videoInput_Two, 0, 360, 480, 360);
+    videoInput_Two.play();
+    
+  }
+  
+  
+  
+  if (itr3 > 1000){
+    //itrBoard.image(videoInput_Three, 0, 720, 480, 360);
+    switch_itr3 = true;
+    
+  }
+  
+  
+  if (switch_itr3){
+    
+    itrBoard.image(videoInput_Three, 0, 720, 480, 360);
+    videoInput_Three.play();
+    
+  }
+  
+  
+  
+  if (itr4 > 1000){
+    //itrBoard.image(videoInput_Four, 480, 0, 480, 360);
+    switch_itr4 = true;
+    
+  }
+ 
+ 
+  if (switch_itr4){
+    
+    itrBoard.image(videoInput_Four, 480, 0, 480, 360);
+    videoInput_Four.play();
+    
+  }
+ 
+ 
+
+  if (itr5 > 1000){
+    //itrBoard.image(videoInput_Five, 480, 360, 480, 360);
+    switch_itr5 = true;
+    
+  }
+  
+  if (switch_itr5){
+    
+    itrBoard.image(videoInput_Five, 480, 360, 480, 360);
+    videoInput_Five.play();
+    
+  }
+  
+  
+  
+  
+  if (itr6 > 1000){
+    //itrBoard.image(videoInput_Six, 480, 720, 480, 360);
+    switch_itr6 = true;
+    
+  }
+  
+   if (switch_itr6){
+    
+    itrBoard.image(videoInput_Six, 480, 720, 480, 360);
+    videoInput_Six.play();
+    
+  }
+  
+    */
+    
+  itrBoard.endDraw();
+  image(itrBoard, 0, 0);                   //the sketch will now show the drawing that is being done to the canvas ie. itrBoard
+ 
+  spoutMad.sendTexture(itrBoard);          //informing the server to serve the canvas ie. itrBoard to MadMapper
+
+}
